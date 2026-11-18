@@ -1,0 +1,104 @@
+# =====================================================================
+#  DarijaVoiceBot - Discord voice bot that talks in Moroccan Darija
+#  After editing this file run:  /darijabot reload
+# =====================================================================
+
+discord:
+  # Your bot token from https://discord.com/developers/applications  (Bot -> Reset Token)
+  token: "PUT_YOUR_DISCORD_BOT_TOKEN_HERE"
+  # Your Discord server ID (right click server icon -> Copy Server ID).
+  # Slash commands appear instantly when this is set. Leave "" to register globally (can take up to 1 hour).
+  guild-id: ""
+  # Optional: a text channel ID where the bot writes what it heard and what it answered. "" = off
+  log-channel-id: ""
+
+# ---------------- Speech to text (hearing) ----------------
+speech-to-text:
+  # Free key from https://console.groq.com/keys
+  groq-api-key: "PUT_YOUR_GROQ_API_KEY_HERE"
+  model: "whisper-large-v3"
+  # "ar" = Arabic (best for Darija). Leave "" to auto-detect (French/English mixing works better).
+  language: "ar"
+  # Hint that helps Whisper understand Darija words
+  prompt: "هادي هضرة بالدارجة المغربية: واش، كيداير، بزاف، دابا، مزيان، علاش، فين، شنو."
+
+# ---------------- AI brain ----------------
+ai:
+  # "gemini" (free key from https://aistudio.google.com/apikey) or "groq" (uses the Groq key above)
+  provider: "gemini"
+  gemini-api-key: "PUT_YOUR_GEMINI_API_KEY_HERE"
+  # "gemini-flash-latest" always points to Google's newest Flash model.
+  gemini-model: "gemini-flash-latest"
+  groq-model: "llama-3.3-70b-versatile"
+  bot-name: "Bot"
+  # How many past messages the bot remembers per Discord server
+  memory-messages: 12
+  system-prompt: |
+    نتا بوت ديال ديسكورد سميتك {name}، كتهضر مع صحابك فالفويس.
+    ديما جاوب بالدارجة المغربية، وكتب الجواب بالحروف العربية (ماشي بالحروف اللاتينية).
+    جاوب بجملة ولا جوج قصار، حيت الجواب غادي يتقرا بالصوت.
+    ما تستعملش الإيموجي، ولا النجوم، ولا markdown، ولا الروابط.
+    كون ظريف، ضحوك شوية، ومحترم.
+    كل رسالة كتبدا بسمية الشخص اللي كيهضر، مثلا "Yassine: واش لاباس".
+
+# ---------------- Text to speech (talking) ----------------
+text-to-speech:
+  # "gemini"     = Google Gemini voice, accent set by the "style" below (uses ai.gemini-api-key, free tier)
+  # "elevenlabs" = most natural voice (free plan: 10,000 characters per month)
+  # "edge"       = free Microsoft Edge voices. "google" = Google Translate voice (backup).
+  # If gemini or elevenlabs fail, the bot automatically talks with the edge voice instead.
+  provider: "gemini"
+  # Moroccan voices: ar-MA-JamalNeural (male) / ar-MA-MounaNeural (female)
+  voice: "ar-MA-JamalNeural"
+  rate: "+0%"     # speed, e.g. "+15%" faster or "-10%" slower
+  pitch: "+0Hz"
+  # If edge fails, automatically try google
+  fallback-to-google: true
+  # Used when provider is "gemini"
+  gemini:
+    model: "gemini-3.1-flash-tts-preview"
+    # Voices: Puck (fun male), Charon (deep male), Fenrir (excited male), Kore (female), Aoede (soft female)
+    voice: "Puck"
+    # How he should talk. Change it freely.
+    style: "Read the following out loud in Moroccan Darija with a natural Casablanca street accent, like a young Moroccan guy chatting with his friends. Casual, warm and a bit funny. Do not use a formal or Middle-Eastern accent:"
+  # Used when provider is "elevenlabs". If it fails (e.g. credits used up) the bot switches to the edge voice.
+  elevenlabs:
+    # https://elevenlabs.io/app/settings/api-keys
+    api-key: "PUT_YOUR_ELEVENLABS_API_KEY_HERE"
+    # The ID of the voice you made with Voice Design (see README)
+    voice-id: "PUT_YOUR_VOICE_ID_HERE"
+    # eleven_v3 = best accent. eleven_flash_v2_5 = faster answers but less Moroccan.
+    model: "eleven_v3"
+    # Optional language hint, e.g. "ar". Leave "" if you get a "language_code" error.
+    language: ""
+
+# ---------------- Listening behaviour ----------------
+voice:
+  # If true, the bot only answers when someone says one of the wake words.
+  # Recommended when many people are in the channel.
+  require-wake-word: false
+  wake-words: ["بوت", "bot", "يا بوت", "البوت"]
+  # How long someone must be quiet (ms) before the bot treats it as the end of a sentence
+  silence-ms: 900
+  # Ignore very short sounds (coughs, clicks)
+  min-speech-ms: 500
+  # Max length of one sentence (seconds)
+  max-utterance-seconds: 25
+  # Loudness threshold for "this is speech" (raise if the bot reacts to background noise)
+  speech-threshold: 500
+  # Don't listen while the bot itself is talking
+  ignore-while-speaking: true
+  # Leave the voice channel automatically when everyone else leaves
+  auto-leave-when-alone: true
+  # Phrases Whisper sometimes invents on silence - these get ignored
+  ignore-phrases:
+    - "اشتركوا في القناة"
+    - "ترجمة نانسي قنقر"
+    - "شكرا للمشاهدة"
+    - "شكرا على المشاهدة"
+    - "Thanks for watching"
+    - "Subtitles by"
+
+minecraft:
+  # Also show voice conversations in the Minecraft chat
+  broadcast-to-chat: false

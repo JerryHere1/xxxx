@@ -1,0 +1,16 @@
+name: DarijaVoiceBot
+version: '${version}'
+main: ma.darija.voicebot.DarijaVoicePlugin
+api-version: '1.21'
+description: Discord voice bot that listens and talks back in Moroccan Darija.
+author: You
+commands:
+  darijabot:
+    description: Control the Darija Discord voice bot
+    usage: /darijabot <status|reload|say|ask|reset|leave>
+    aliases: [dbot]
+    permission: darijabot.admin
+permissions:
+  darijabot.admin:
+    description: Use /darijabot
+    default: op
